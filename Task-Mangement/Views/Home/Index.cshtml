@@ -2,7 +2,69 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="page-heading d-flex justify-content-between align-items-center">
+    <h1 class="page-heading-title">Task Board</h1>
+    @Html.ActionLink("New Task", null, "NewTask",
+            new { @class = "btn" })
 </div>
+
+<div class="mx-auto d-flex flex-column card-shadow">
+    <table class="mx-auto table-listing table">
+        <thead>
+            <tr>
+                <th scope="col">
+                    <input id="check-all" class="fs-4 form-check-input" type="checkbox" value="0" aria-label="Checkbox for select all" />
+                </th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                        ID
+                    </div>
+                    <div class="header-filter input-group" style="width: 1vw;">
+                        <input class="form-control" style="visibility: hidden;" />
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                        Title
+                    </div>
+                    <div class="header-filter input-group" style="width: 1vw;">
+                        <input class="form-control" style="visibility: hidden;" />
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                        Description
+                    </div>
+                    <div class="header-filter input-group" style="width: 1vw;">
+                        <input class="form-control" style="visibility: hidden;" />
+                    </div>
+                </th>
+                <th scope="col">
+                    <div class="table-header" style="margin-bottom: 1rem;">
+                        Due Date
+                    </div>
+                    <div class="header-filter input-group" style="width: 1vw;">
+                        <input class="form-control" style="visibility: hidden;" />
+                    </div>
+                </th>
+            </tr>               
+        </thead>
+        <tbody>
+            <tr id="hidden-row"></tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="vertical-align:middle;">                        
+                        <input id="" class="fs-4 check form-check-input" type="checkbox" value="0">
+                    </td>
+                    <td style="vertical-align:middle;">1</td>
+                    <td style="vertical-align:middle;">
+                        Sang;
+                    </td>
+
+                </tr>
+            }            
+        </tbody>
+    </table>    
+</div>
+
