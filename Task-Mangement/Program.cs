@@ -1,7 +1,15 @@
+using Task_Mangement.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddEndpointsApiExplorer();
+
+// This connection for connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<SampleDBContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
