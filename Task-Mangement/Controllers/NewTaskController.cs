@@ -25,7 +25,7 @@ namespace Task_Mangement.Controllers
         {
             var TaskList = await _context.Task.ToListAsync();
             if (Title == null)
-            {
+        {
                 return View(TaskList);
             }
             var filterList = TaskList.Where(task => task.TaskTitle.StartsWith(Title)).ToList();
