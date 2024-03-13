@@ -1,11 +1,7 @@
 ﻿@model IEnumerable<Task_Mangement.Models.Task>
 
 @{
-    ViewData["Title"] = "Index";
-    var d = new Dictionary<string, string>
-    {
-        {"title", "title.id"},
-    };
+    ViewData["Title"] = "Index";    
 }
 
 <h1>Index</h1>
@@ -14,16 +10,14 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<a asp-action="Index" asp-all-route-data="d">Filter</a>
-
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayName("Title")
+                @Html.DisplayNameFor(model => model.TaskTitle)
                 <div class="header-filter input-group" style="width: 15rem;">
                     <input value="" name="title" id="title" class="form-control"
-                    placeholder="Task Title" type="text">
+                           placeholder="Task Title" type="text">
                 </div>
             </th>
             <th>
@@ -38,14 +32,14 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="table-body">
 @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TaskTitle)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaskStatus)
+            <td class="status">
+                @Html.DisplayTextFor(modelItem => item.TaskStatus)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TaskDescription)
@@ -62,3 +56,44 @@
 }
     </tbody>
 </table>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    // Handle checkbox display
+    $(".status").each(function(index) {     
+        var text = $(this).text();
+        text = text.replace(/\s/g, '');                
+        if (text == "True") $(this).html("Done");
+        else $(this).html("Pending");
+    })
+
+    // handle filter submit
+    $(document).keypress(function (event) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if (keycode == '13') {
+            $.ajax({
+                url: `http://localhost:5265/NewTask/Filter?title=${$("#title").val()}`,
+                method: "post",
+                context: {"title": $("#title").val()}
+            }).done(function (data) {
+                console.log(data);
+                var htmlText = data.map(d => {                                                   
+                    if (d.taskStatus == true) status = "Done";
+                    else status = "Pending";
+                    return `
+                                <tr>
+                                    <td>${d.taskTitle}</td>
+                                    <td>${status}</td>
+                                    <td>${d.taskDescription}</td>
+                                    <td>${d.taskDueDate}</td>
+                                </tr>`
+                }).join(" ");
+                $("#table-body").html(htmlText);
+            })  
+        }
+
+    });
+</script>

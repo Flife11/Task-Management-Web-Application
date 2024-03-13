@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +22,25 @@ namespace Task_Mangement.Controllers
         }
 
         // GET: NewTask
-        public async Task<IActionResult> Index(string? Title)
+        public async Task<IActionResult> Index()
         {
             var TaskList = await _context.Task.ToListAsync();
-            if (Title == null)
+            return View(TaskList);
+        }
+
+        [HttpPost]
+        public async Task<List<Task>> Filter(String title)
         {
-                return View(TaskList);
+            
+            var TaskList = await _context.Task.ToListAsync();
+            if (title == null)
+            {
+                return TaskList;
             }
-            var filterList = TaskList.Where(task => task.TaskTitle.StartsWith(Title)).ToList();
-            return View(filterList);
+            //Debug.WriteLine(title); 
+            var filterList = await _context.Task.Where(x => x.TaskTitle.ToLower().Contains(title.ToLower())).ToListAsync();
+            //Debug.WriteLine(filterList);
+            return filterList;
         }
 
         // GET: NewTask/Details/5
